@@ -3,13 +3,16 @@ import { IBreadcrumbs } from "@/types";
 
 const breadcrumbs: IBreadcrumbs[] = [
   {
-    title: "Dashboard",
-    href: "/",
+    title: "Groups",
+    href: "/groups",
+  },
+  {
+    title: "Create",
+    href: "/groups/create",
   },
 ];
 
-export default async function Home() {
-
+export default function CreateGroup() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
