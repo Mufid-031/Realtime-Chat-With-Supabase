@@ -4,8 +4,12 @@ import AppLayout from "@/layouts/app-layout";
 import { createClient } from "@/lib/supabase/server"; // pakai server client
 import { IBreadcrumbs } from "@/types";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const supabase = await createClient();
 
   // Fetch group info
@@ -15,6 +19,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     .eq("id", id)
     .single();
 
+  console.log(group);
+
   if (!group) {
     throw new Error("Group not found");
   }
@@ -23,10 +29,11 @@ export default async function Page({ params }: { params: { id: string } }) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log(user);
+
   if (!user) {
     return null;
   }
-
 
   const breadcrumbs: IBreadcrumbs[] = [
     {
