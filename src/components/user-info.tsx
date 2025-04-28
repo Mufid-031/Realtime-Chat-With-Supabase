@@ -1,32 +1,29 @@
-import { useInitials } from "@/hooks/use-initials";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+"use client";
+
+import { createClient } from "@/lib/supabase/client";
+import { UserInfoAvatar } from "./user-info-avatar";
+import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 
-export function UserInfo({
-  user,
-  showEmail = false,
-}: {
-  user: User;
-  showEmail?: boolean;
-}) {
-  const getInitials = useInitials();
+export function UserInfo({ showEmail = false }: { showEmail?: boolean }) {
+  const [userLoggedIn, setUserLoggedIn] = useState<User | null>(null);
+  
+  useEffect(() => {
+    const getUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
 
-  return (
-    <>
-      <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-        <AvatarImage src={""} alt={user.email!} />
-        <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-          {getInitials(user.email! as string)}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{user.email}</span>
-        {showEmail && (
-          <span className="text-muted-foreground truncate text-xs">
-            {user.email}
-          </span>
-        )}
-      </div>
-    </>
-  );
+      if (user) {
+        setUserLoggedIn(user);
+      }
+    }
+    
+    getUser();
+  }, [])
+
+  if (!userLoggedIn) {
+    return null;
+  }
+
+  return <UserInfoAvatar user={userLoggedIn!} showEmail={showEmail} />;
 }
