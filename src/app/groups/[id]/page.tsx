@@ -1,3 +1,5 @@
+import { Messages } from "@/components/messages";
+import { SendMessage } from "@/components/send-message";
 import AppLayout from "@/layouts/app-layout";
 import { createClient } from "@/lib/supabase/server"; // pakai server client
 import { IBreadcrumbs } from "@/types";
@@ -17,12 +19,15 @@ export default async function Page({ params }: { params: { id: string } }) {
     throw new Error("Group not found");
   }
 
-  // Fetch all messages for that group
-  const { data: messages } = await supabase
-    .from("messages")
-    .select("*, users(username)") // ambil user username
-    .eq("group_id", id)
-    .order("created_at", { ascending: true });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  console.log(user);
 
   const breadcrumbs: IBreadcrumbs[] = [
     {
@@ -39,18 +44,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-          <h1 className="text-2xl font-bold">{group.name}</h1>
-
-          <div className="mt-4 space-y-4">
-            {messages?.map((message) => (
-              <div key={message.id} className="rounded-lg bg-gray-100 p-4">
-                <p className="text-sm text-gray-700">{message.content}</p>
-                <span className="text-xs text-gray-500">
-                  {message.users?.username ?? "Unknown User"}
-                </span>
-              </div>
-            ))}
-          </div>
+          <Messages groupId={group.id} user={user} />
+          <SendMessage groupId={group.id} user={user} />
         </div>
       </div>
     </AppLayout>
