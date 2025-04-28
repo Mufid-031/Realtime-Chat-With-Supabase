@@ -27,7 +27,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     return null;
   }
 
-  console.log(user);
 
   const breadcrumbs: IBreadcrumbs[] = [
     {

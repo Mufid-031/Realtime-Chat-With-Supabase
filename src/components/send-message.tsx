@@ -4,8 +4,15 @@ import { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 
-export function SendMessage({ groupId, user }: { groupId: number; user: any }) {
+export function SendMessage({
+  groupId,
+  user,
+}: {
+  groupId: number;
+  user: User;
+}) {
   const supabase = createClient();
   const [message, setMessage] = useState<string>("");
 
@@ -32,6 +39,9 @@ export function SendMessage({ groupId, user }: { groupId: number; user: any }) {
         id="message"
         name="message"
         value={message}
+        onKeyDown={(e) =>
+          e.key === "Enter" && message !== "" && handleSendMessage()
+        }
         onChange={(e) => setMessage(e.target.value)}
       />
       <Button onClick={handleSendMessage}>Send</Button>

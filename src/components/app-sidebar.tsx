@@ -25,17 +25,11 @@ import { NavUser } from "./nav-user";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
-
-interface Group {
-  id: string;
-  name: string;
-  created_at: string;
-}
+import { IGroup } from "@/types";
 
 export function AppSidebar() {
   const supabase = createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<IGroup[]>([]);
 
   const getGroups = async () => {
     try {
@@ -72,14 +66,26 @@ export function AppSidebar() {
           setGroups((currentGroups) => {
             switch (eventType) {
               case "INSERT":
-                return [...currentGroups, newGroup as Group];
+                if (
+                  "id" in newGroup &&
+                  "name" in newGroup &&
+                  "created_at" in newGroup
+                ) {
+                  return [...currentGroups, newGroup as IGroup];
+                } else {
+                  console.error("Invalid group data:", newGroup);
+                  return currentGroups;
+                }
 
               case "UPDATE":
                 return currentGroups.map((group) =>
-                  group.id === (newGroup as Group).id ? newGroup : group
+                  group.id === (newGroup as IGroup).id
+                    ? (newGroup as IGroup)
+                    : group
                 );
 
               case "DELETE":
+                // Use oldGroup to remove the deleted group
                 return currentGroups.filter(
                   (group) => group.id !== oldGroup.id
                 );
@@ -143,7 +149,7 @@ export function AppSidebar() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              deleteGroup(group.id);
+                              deleteGroup(Number(group.id));
                             }}
                             className={`ml-auto opacity-0 transition-opacity group-hover:opacity-100`}
                           />

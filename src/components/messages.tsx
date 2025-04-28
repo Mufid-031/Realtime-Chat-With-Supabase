@@ -5,11 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useInitials } from "@/hooks/use-initials";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import { IMessage } from "@/types";
 
-export function Messages({ groupId, user }: { groupId: number; user: any }) {
+export function Messages({ groupId, user }: { groupId: number; user: User }) {
   const supabase = createClient();
   const getInitials = useInitials();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   const getMessages = async () => {
     const { data } = await supabase

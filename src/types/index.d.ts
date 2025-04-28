@@ -6,6 +6,7 @@ export interface IBreadcrumbs {
 export interface IUser {
   id: string;
   email: string;
+  [key: string]: unknown;
 }
 
 export interface IGroup {
@@ -15,11 +16,10 @@ export interface IGroup {
 }
 
 export interface IMessage {
-  id: string;
-  user_id: string;
-  group_id: string;
+  id: number;
+  group_id: number;
   content: string;
-  user: IUser;
-  group: IGroup;
-  created_at: string;
+  user_id: string;
+  user_email: string;
+  user_created_at: string;
 }
