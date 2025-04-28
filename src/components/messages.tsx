@@ -67,7 +67,9 @@ export function Messages({ groupId, user }: { groupId: number; user: any }) {
               <AvatarImage src={""} alt="" />
               <AvatarFallback>{getInitials(message.user_email)}</AvatarFallback>
             </Avatar>
-            <div className="bg-muted p-2 rounded w-1/3">{message.content}</div>
+            <div className="bg-muted p-2 rounded w-1/3 break-words h-auto">
+              {message.content}
+            </div>
           </div>
         ))}
       </div>
