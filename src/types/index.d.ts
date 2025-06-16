@@ -21,5 +21,5 @@ export interface IMessage {
   content: string;
   user_id: string;
   user_email: string;
-  user_created_at: string;
+  created_at: string;
 }

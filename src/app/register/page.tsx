@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,53 +12,111 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signup } from "../actions";
+import { motion } from "framer-motion";
+import { MessageCircle, Mail, Lock, UserPlus } from "lucide-react";
 
 export default function Register() {
   return (
-    <main className="mx-auto flex flex-col w-full h-full min-h-screen max-w-7xl gap-4 justify-center items-center">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Register</CardTitle>
-          <CardDescription>
-            Please enter your email and password to register
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="*****"
-                />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <p className="text-sm text-muted-foreground">
-                  Already have an account?{" "}
-                  <Link className="underline text-foreground" href="/login">
-                    Login
-                  </Link>
-                </p>
-                <Button formAction={signup} className="w-full">
-                  Sign Up
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        {/* Logo/Brand */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-900 dark:bg-gray-100 rounded-2xl mb-4">
+            <MessageCircle className="w-8 h-8 text-white dark:text-gray-900" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            ChatApp
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Join the conversation today
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <Card className="border border-gray-200 dark:border-gray-700 shadow-lg bg-white dark:bg-gray-800">
+            <CardHeader className="space-y-1 pb-6">
+              <CardTitle className="text-2xl font-semibold text-center text-gray-900 dark:text-white">
+                Create account
+              </CardTitle>
+              <CardDescription className="text-center text-gray-600 dark:text-gray-400">
+                Sign up to start chatting with others
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form className="space-y-4">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="pl-10 h-12 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="Create a password"
+                      className="pl-10 h-12 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <Button
+                  formAction={signup}
+                  className="w-full h-12 bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200 text-white dark:text-gray-900 font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
+                >
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Create Account
                 </Button>
-              </div>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </main>
+                <div className="text-center pt-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <Link
+                      href="/login"
+                      className="font-medium text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300 transition-colors"
+                    >
+                      Sign in
+                    </Link>
+                  </p>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }
